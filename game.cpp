@@ -23,14 +23,16 @@ void Game::coup(int p){
 	}
 	else
 		toCoup[p] = true;
-		if(play_ord.size() == 2)
-			coup(p);
 }
 
 void coup::Game::move_turn(){
 	turnum++;
 	if(turnum == play_ord.size())
 		turnum = 0;
+	
+	if(toCoup[turnum]){
+		coup(turnum);
+	}
 }
 
 Game::~Game()

@@ -4,7 +4,7 @@ namespace coup{
 
 	class Spy : public Player{
 	public:
-		int peekCoins(Player p);
-		void prevent_arrest(Player p);
+		int peekCoins(Player& p);
+		void prevent_arrest(Player& p);
 	};
 }

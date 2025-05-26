@@ -14,11 +14,14 @@ Player::Player(Game *g, string n){
 void Player::gather() {
 	beforeAll("gather");
 	coins ++;
+	afterAll("gather");
+
 }
 
 void Player::tax() {
 	beforeAll("tax");
 	coins += 2;
+	afterAll("tax");
 }
 
 void Player::bribe() {
@@ -28,15 +31,21 @@ void Player::bribe() {
 	beforeAll("bribe");
 	anotherTurn = true;
 	coins -= 4;
+	afterAll("bribe");
 }
 
 void Player::arrest(Player& other){
 	if(other.coins<1){
-		throw runtime_error("You sholdn't arrest player with 0 coins.");
+		throw runtime_error("You shouldn't arrest player with 0 coins.");
+	}
+	if(&other == last_arrested){
+		throw runtime_error("You shouldn't arrest player twice in a row.");
 	}
 	beforeAll("arrest");
 	coins++;
-	other.coins--;
+	other.arrested(*this);
+	last_arrested = &other;
+	afterAll("arrest");
 }
 
 void Player::sanction(Player& other) {
@@ -45,7 +54,8 @@ void Player::sanction(Player& other) {
 	}
 	beforeAll("sanction");
 	coins -= 3;
-	other.sanctioned();
+	other.sanctioned(*this);
+	afterAll("sanction");
 }
 
 void Player::coup(Player& other) {
@@ -55,18 +65,11 @@ void Player::coup(Player& other) {
 	beforeAll("coup");
 	coins -= 7;
 	other.couped();
+	afterAll("coup");
 }
 
 void Player::beforeAll(string func) {
-	cout<<"check coup..."<<endl;
-	if(game->toCoup[game->turnum]){
-		if(p_num == game->turnum)
-			throw runtime_error("Couped players can't play.");
-		cout<<"couping."<<endl;
-		game->coup(game->turnum);
-		cout<<game->players()[game->turnum]<<" was couped.";
-		
-	}
+	
 	cout<<"check turns..."<<endl;
 	if(game->turnum != p_num){
 		throw runtime_error(string("Not ").append(name).append(" turn."));
@@ -89,12 +92,33 @@ void Player::beforeAll(string func) {
 		canArrest = true;
 	}
 
+
+	
+}
+
+void Player::afterAll(string func) {
+
+	lastAct = func;
+	
 	cout<<"move turn"<<endl;
 	if(!anotherTurn){
 		game->move_turn();
 		anotherTurn = false;
 	}
 	cout<<"perform "<<func<<" by "<<name<<endl<<endl;
-	
 }
 
+void coup::Player::unTax() {
+	if(lastAct != string("tax")){
+		throw runtime_error("My last act wasn't tax!");
+	}
+	coins -= 2;
+}
+
+void coup::Player::unCoup() {
+	if(game->toCoup[p_num]){
+		game->toCoup[p_num] = false;
+	} else{
+		throw runtime_error("Player didn't couped, can't uncoup.");
+	}
+}
