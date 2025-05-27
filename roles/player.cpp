@@ -3,10 +3,9 @@ using namespace coup;
 
 Player::Player(Game &g, string n): game(g){
 	name = n;
-	p_num = game.players().size();
+	
 
-	game.players().push_back(n);
-	game.toCoup.push_back(false);
+	game.add_player(name);
 	coins = 0;
 }
 
@@ -52,8 +51,8 @@ void Player::sanction(Player& other) {
 		throw runtime_error("player doesn't have enough coins for sanction.");
 	}
 	beforeAll("sanction");
-	coins -= 3;
 	other.sanctioned(*this);
+	coins -= 3;
 	afterAll("sanction");
 }
 
@@ -115,8 +114,9 @@ void coup::Player::unTaxed() {
 }
 
 void coup::Player::unCouped() {
-	if(game.toCoup[p_num]){
-		game.toCoup[p_num] = false;
+	int my_loc = find(game.players(),name);
+	if(game.toCoup[my_loc]){
+		game.toCoup[my_loc] = false;
 	} else{
 		throw runtime_error("Player didn't couped, can't uncoup.");
 	}

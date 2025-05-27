@@ -8,7 +8,6 @@ namespace coup {
 		Game &game;
 		string name;
 		string lastAct;
-		unsigned int p_num;
 
 		Player *last_arrested;
 
@@ -22,7 +21,7 @@ namespace coup {
 
 	
 	public:
-		int coins;
+		unsigned int coins;
 		Player(Game &g, string n);
 		void gather();
 		virtual void tax();
@@ -34,7 +33,7 @@ namespace coup {
 
 	
 		virtual void sanctioned(Player& p) {isSancted = true;}
-		virtual void couped() {game.coup(p_num);}
+		virtual void couped() {game.coup(name);}
 		void no_arrest() {canArrest = false;}
 		virtual void arrested(Player& p) {coins--;}
 

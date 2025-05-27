@@ -8,7 +8,5 @@ int coup::Spy::peekCoins(Player &p)
 }
 
 void coup::Spy::prevent_arrest(Player& p) {
-	beforeAll("prevent arrest");
 	p.no_arrest();
-	afterAll("prevent arrest");
 }

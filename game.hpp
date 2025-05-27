@@ -13,21 +13,26 @@ namespace coup{
 
 		private:
 			vector<string> play_ord;
+			bool is_game_started = false;
 		
 		public:
 			unsigned int turnum;
 			vector<bool> toCoup;
 
 
-			Game(){turnum = 0;}
+			Game() {turnum = 0;}
 			string turn();
-			vector<string>& players(){return play_ord;}
+			vector<string> players();
 			string winner();
-			void coup(int p);
+			void coup(string p);
 
+			void add_player(string p);
 			void move_turn();
 			~Game();
 	};
+
+	
+	int find(const vector<string>& v, const string& s);
 }
 
 #endif //GAME_HPP

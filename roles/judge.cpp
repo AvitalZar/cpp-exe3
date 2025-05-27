@@ -10,6 +10,8 @@ void Judge::un_bribe(Player &p)
 }
 
 void Judge::sanctioned(Player& p) {
+	if(p.coins < 4)
+		throw runtime_error("Player doesn't have enough coins for sanction on a judge.");
 	Player::sanctioned(p);
 	p.coins--;
 }

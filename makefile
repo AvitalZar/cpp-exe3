@@ -25,5 +25,8 @@ game.o: game.cpp game.hpp
 #player.o: roles/player.cpp roles/player.hpp game.hpp
 #	$(CXX) $(CXXFLAGS) -c $<
 
+valgrind: main
+	valgrind --leak-check=full ./main
+
 clean:
 	rm -f *.o main
