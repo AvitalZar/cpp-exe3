@@ -4,8 +4,8 @@ using namespace coup;
 int main(){
 	Game g;
 
-	Player p1(&g,"yosi");
-	Player p2(&g,"dani");
+	Player p1(g,"yosi");
+	Player p2(g,"dani");
 
 	g.turn();
 

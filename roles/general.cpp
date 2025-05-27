@@ -1,17 +1,10 @@
-#pragma once
-#include "player.hpp"
-namespace coup{
+#include "general.hpp"
+using namespace coup;
 
-	class General : public Player{
-	private:
-	public:
-		void unCoup(Player& p);
-	};
+General::General(Game &g, string n): Player(g,n){}
 
-	void General::unCoup(Player& p){
-		p.unCoup();
-		coins -= 5;
-	}
-
-	
+void General::unCoup(Player &p)
+{
+	p.unCouped();
+	coins -= 5;
 }

@@ -1,13 +1,14 @@
+#pragma once
 #include "game.hpp"
 using namespace std;
 
 namespace coup {
 	class Player {
 	private:
-		Game *game;
+		Game &game;
 		string name;
 		string lastAct;
-		int p_num;
+		unsigned int p_num;
 
 		Player *last_arrested;
 
@@ -22,29 +23,28 @@ namespace coup {
 	
 	public:
 		int coins;
-		Player(Game *g, string n);
+		Player(Game &g, string n);
 		void gather();
 		virtual void tax();
 		void bribe();
 		void arrest(Player& other);
 		void sanction(Player& other);
 		void coup(Player& other);
+		int getCoins() {return coins;}
 
 	
 		virtual void sanctioned(Player& p) {isSancted = true;}
-		virtual void couped() {game->coup(p_num);}
+		virtual void couped() {game.coup(p_num);}
 		void no_arrest() {canArrest = false;}
 		virtual void arrested(Player& p) {coins--;}
 
 		virtual void beforeAll(string func);
 		void afterAll(string func);
 
-		int getCoins(){return coins;}
 		bool get_isSancted(){return isSancted;}
 
-		virtual void unTax();
-		void unCoup();
-		void unBribe(){anotherTurn = false;}
-
+		virtual void unTaxed();
+		void unCouped();
+		void unBribed();
 	};
 }

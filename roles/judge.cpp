@@ -1,19 +1,15 @@
-#pragma once
-#include "player.hpp"
-namespace coup{
+#include "judge.hpp"
 
-	class Judge : public Player{
-	public:
-		void un_bribe(Player& p);
-		void sanctioned(Player& p);
-	};
-	
-	void Judge::un_bribe(Player& p) {
-		p.unBribe();
-	}
+using namespace coup;
 
-	void Judge::sanctioned(Player& p) {
-		Player::sanctioned(p);
-		p.coins--;
-	}
+Judge::Judge(Game &game, string name): Player(game,name) {}
+
+void Judge::un_bribe(Player &p)
+{
+	p.unBribed();
+}
+
+void Judge::sanctioned(Player& p) {
+	Player::sanctioned(p);
+	p.coins--;
 }

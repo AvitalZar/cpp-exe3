@@ -1,20 +1,17 @@
-#pragma once
-#include "player.hpp"
-namespace coup{
 
-	class Merchant : public Player{
-	public:
-		void beforeAll(string func) override;
-		void arrested(Player& p) override;
-	};
+#include "merchant.hpp"
 
-	void Merchant::beforeAll(string func) {
-		Player::beforeAll(func);
-		if(coins>=3)
-			coins++;
-	}
-	void Merchant::arrested(Player& p){
-		coins -= 2;
-		p.coins --;
-	}
+using namespace coup;
+
+Merchant::Merchant(Game &game, string name): Player(game,name) {}
+
+void Merchant::beforeAll(string func)
+{
+	Player::beforeAll(func);
+	if(coins>=3)
+		coins++;
+}
+void Merchant::arrested(Player& p){
+	coins -= 2;
+	p.coins --;
 }

@@ -1,7 +1,9 @@
-#pragma once
 #include "spy.hpp"
 
-int coup::Spy::peekCoins(Player& p) {
+coup::Spy::Spy(Game &g, string n): Player(g,n) {}
+
+int coup::Spy::peekCoins(Player &p)
+{
 	return p.getCoins();
 }
 

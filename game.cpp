@@ -2,6 +2,8 @@
 using namespace coup;
 
 string Game::turn(){
+	if(play_ord.size() == 0)
+		throw runtime_error("There's no game and no turn.");
 	cout<<"It's "<<play_ord.at(turnum)<<" turn."<<endl;
 	return play_ord.at(turnum);
 }
@@ -17,7 +19,7 @@ void Game::coup(int p){
 	if(toCoup[p]){
 		toCoup.erase(toCoup.begin()+p);
 		play_ord.erase(play_ord.begin()+p);
-		if(turnum>=play_ord.size()){
+		if(turnum >= play_ord.size()){
 			turnum = 0;
 		}
 	}

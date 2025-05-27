@@ -1,22 +1,15 @@
-#pragma once
-#include "player.hpp"
+#include "governor.hpp"
+using namespace coup;
 
-namespace coup{
+Governor::Governor(Game &g, string n): Player(g,n) {}
 
-	class Governor : public Player{
-	public:
-		void tax() override {
-			Player::tax();
-			coins ++;
-		}
-
-		void undo_tax(Player& p){
-			p.unTax();
-		}
-
-		void unTax(){
-			Player::unTax();
-			coins--;
-		}
-	};
+void Governor::tax()
+{
+	Player::tax();
+	coins++;
 }
+
+	void coup::Governor::undo_tax(Player &p) {
+			p.unTaxed();
+		
+	}

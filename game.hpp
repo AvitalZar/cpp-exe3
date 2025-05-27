@@ -1,5 +1,5 @@
 #ifndef GAME_HPP
-#define GMAE_HPP
+#define GAME_HPP
 
 
 #include <iostream>
@@ -15,7 +15,7 @@ namespace coup{
 			vector<string> play_ord;
 		
 		public:
-			int turnum;
+			unsigned int turnum;
 			vector<bool> toCoup;
 
 
