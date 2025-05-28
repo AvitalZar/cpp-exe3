@@ -7,6 +7,7 @@ void General::unCoup(Player &p)
 {
 	if(coins < 5)
 		throw runtime_error("General doesn't have enough coins for uncoup.");
-	p.unCouped();
+	if(!game.un_coup(p.name()))
+		throw runtime_error("No one have done coup against this player, can't uncoup.");
 	coins -= 5;
 }

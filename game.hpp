@@ -17,17 +17,18 @@ namespace coup{
 		
 		public:
 			unsigned int turnum;
-			vector<bool> toCoup;
+			vector<string> toCoup;
 
 
 			Game() {turnum = 0;}
 			string turn();
 			vector<string> players();
 			string winner();
-			void coup(string p);
-
+			void coup(string active, string passive);
+			bool un_coup(string p);
 			void add_player(string p);
 			void move_turn();
+			bool isturn(string p) {return play_ord[turnum] == p;}
 			~Game();
 	};
 

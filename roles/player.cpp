@@ -2,10 +2,10 @@
 using namespace coup;
 
 Player::Player(Game &g, string n): game(g){
-	name = n;
+	p_name = n;
 	
 
-	game.add_player(name);
+	game.add_player(name());
 	coins = 0;
 }
 
@@ -27,19 +27,20 @@ void Player::bribe() {
 		throw runtime_error("player doesn't have enough coins for bribing.");
 	}
 	beforeAll("bribe");
-	anotherTurn = true;
+	anotherTurn = 1;
 	coins -= 4;
 	afterAll("bribe");
 }
 
 void Player::arrest(Player& other){
+	beforeAll("arrest");
 	if(other.coins<1){
 		throw runtime_error("You shouldn't arrest player with 0 coins.");
 	}
 	if(&other == last_arrested){
 		throw runtime_error("You shouldn't arrest player twice in a row.");
 	}
-	beforeAll("arrest");
+	cout << name() << " arrest " << other.name() << endl;
 	coins++;
 	other.arrested(*this);
 	last_arrested = &other;
@@ -62,18 +63,18 @@ void Player::coup(Player& other) {
 	}
 	beforeAll("coup");
 	coins -= 7;
-	other.couped();
+	game.coup(name(), other.name());
 	afterAll("coup");
 }
 
 void Player::beforeAll(string func) {
 	
 	//cout<<"check turns..."<<endl;
-	if(game.players()[game.turnum] != name){
-		throw runtime_error(string("Not ")+(name)+(" turn."));
+	if(!game.isturn(name())){
+		throw runtime_error("Not " + name() + " turn.");
 	}
 
-	if(coins >= 10 && !func.compare("coup")){
+	if(coins >= 10 && func != "coup"){
 		throw runtime_error("Player with at list 10 coins must perform coup.");
 	}
 	//cout<<"check sanction..."<<endl;
@@ -97,35 +98,27 @@ void Player::beforeAll(string func) {
 void Player::afterAll(string func) {
 
 	lastAct = func;
-	
+	cout<<"perform "<<func<<" by "<<name()<<endl<<endl;
+
 	//cout<<"move turn"<<endl;
-	if(!anotherTurn){
+	if(anotherTurn != 2){
 		game.move_turn();
-		anotherTurn = false;
-	}
-	cout<<"perform "<<func<<" by "<<name<<endl<<endl;
+		if(anotherTurn == 1) anotherTurn ++;
+	} else anotherTurn = 0;
 }
 
 void coup::Player::unTaxed() {
 	if(lastAct != string("tax")){
-		throw runtime_error(name+"'s last act wasn't tax!");
+		throw runtime_error(name()+"'s last act wasn't tax!");
 	}
 	coins -= 2;
 }
 
-void coup::Player::unCouped() {
-	int my_loc = find(game.players(),name);
-	if(game.toCoup[my_loc]){
-		game.toCoup[my_loc] = false;
-	} else{
-		throw runtime_error("Player didn't couped, can't uncoup.");
-	}
-}
 
 void coup::Player::unBribed(){
-	cout << "trying to undo " << name <<"'s bribing" << endl;
+	cout << "trying to undo " << name() <<"'s bribing" << endl;
 	if(lastAct != string("bribe")){
-		throw runtime_error(name+"'s last act wasn't bribe.");
+		throw runtime_error(name()+"'s last act wasn't bribe.");
 	}
 	anotherTurn = false;
 }

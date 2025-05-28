@@ -94,6 +94,7 @@ int main() {
     spy.gather();
     cout << baron.getCoins() << endl; // Expected: 7
     baron.coup(governor); // Coup against governor
+	game_1.turn();
     general.gather();
     judge.gather();
     

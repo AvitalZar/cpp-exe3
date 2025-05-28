@@ -11,7 +11,7 @@ string Game::turn(){
 vector<string> coup::Game::players() {
 	vector<string> ans;
 	for(unsigned int i = 0; i < play_ord.size(); i++){
-		if(!toCoup[i])
+		if(find(toCoup,play_ord[i]) == -1)
 			ans.push_back(play_ord[i]);
 	}
 	return ans;
@@ -26,17 +26,37 @@ string Game::winner(){
 	return play_ord.front();
 }
 
-void Game::coup(string p){
-	int loc = find(play_ord,p);
-	if(toCoup[loc]){
-		toCoup.erase(toCoup.begin()+loc);
-		play_ord.erase(play_ord.begin()+loc);
+void Game::coup(string active, string passive){
+	cout << active << " is trying to coup " << passive << endl;
+	if(find(play_ord, passive) == -1)
+		throw runtime_error("Can't coup: This player is not in the game.");
+	int loc = find(play_ord,active);
+	
+	if(toCoup[loc] == ""){
+		toCoup[loc] = passive;
+	} else if(toCoup[loc] == passive){
+		int pass_loc = find(play_ord, passive);
+		play_ord.erase(play_ord.begin()+pass_loc);
+		toCoup.erase(toCoup.begin() + pass_loc);
 		if(turnum >= play_ord.size()){
 			turnum = 0;
 		}
+		toCoup[loc] = "";
 	}
 	else
-		toCoup[loc] = true;
+		throw runtime_error("Something wrong. This player was about to coup another player.");
+		
+}
+
+bool coup::Game::un_coup(string p) {
+	bool ans = false;
+	for(unsigned int i = 0; i < toCoup.size(); i++){
+		if(toCoup[i] == p){
+			toCoup[i] = "";
+			ans = true;
+		}
+	}
+	return ans;
 }
 
 void coup::Game::add_player(string p) {
@@ -44,19 +64,27 @@ void coup::Game::add_player(string p) {
 		throw runtime_error("There's already player with that name in the game. Choose another name.");
 	}
 	play_ord.push_back(p);
-	toCoup.push_back(false);
+	toCoup.push_back("");
 	if(play_ord.size() == 2)
 		is_game_started = true;
 }
 
 void coup::Game::move_turn()
 {
+	cout << "move turn" << endl;
 	turnum++;
-	if(turnum == play_ord.size())
+	if(turnum == play_ord.size()){
+		cout << "zero turn" << endl;
 		turnum = 0;
+	}
 	
-	if(toCoup[turnum]){
-		coup(play_ord[turnum]);
+	if(toCoup[turnum] != ""){
+		cout << "End a round, coup." << endl;
+		coup(play_ord[turnum], toCoup[turnum]);
+	}
+	if(find(toCoup, play_ord[turnum]) != -1){
+		cout << "This player couped, move turn." << endl;
+		move_turn();
 	}
 }
 

@@ -121,8 +121,13 @@ TEST_CASE("Player Basic Actions") {
         CHECK(p1.getCoins() == 0);
 
 		CHECK(game.players().size() == 2);
+		for (string name : game.toCoup) {
+        	cout << "- " << name << endl;
+    	}
 		CHECK(game.turn() == "P2");
+		cout << "1" << endl;
 		p2.gather();
+		cout << "2" << endl;
 		CHECK(game.turn() == "P1");
 		p2.coins += 7;
 		p1.gather();
@@ -165,6 +170,11 @@ TEST_CASE("arrest & sanction") {
 
     SUBCASE("Arrest action") {
 
+		try{
+			p1.arrest(p2);
+		} catch (const std::exception &e){
+			std::cerr << e.what() << '\n';
+		}
 		CHECK_THROWS(p1.arrest(p2));
 		CHECK(p1.getCoins() == 0);
         CHECK(game.turn() == "P1");
@@ -176,8 +186,19 @@ TEST_CASE("arrest & sanction") {
         CHECK(p3.getCoins() == 1);
         CHECK(p1.getCoins() == 0);
 
-        CHECK(game.turn() == "P2");
-		CHECK_THROWS(p2.arrest(p1));
+        p1.gather();
+		p2.gather();
+		CHECK(game.turn() == "P3");
+		try{
+			p3.arrest(p1);
+		} catch (const std::exception &e){
+			std::cerr << e.what() << '\n';
+		}
+		CHECK_THROWS(p3.arrest(p1));
+		p3.arrest(p2);
+		p1.gather();
+		p2.gather();
+		CHECK_NOTHROW(p3.arrest(p1));
     }
     
     SUBCASE("Sanction action") {
@@ -199,6 +220,7 @@ TEST_CASE("arrest & sanction") {
     }
 
 }
+
 
 TEST_CASE("Spy Role") {
     Game game;
@@ -225,6 +247,11 @@ TEST_CASE("Spy Role") {
 		spy.tax();
 
         p3.coins = 1;
+		try{
+			p2.arrest(p3);
+		} catch (const std::exception &e){
+			std::cerr << e.what() << '\n';
+		}
         CHECK_THROWS_AS(p2.arrest(p3), std::runtime_error);
         
         p2.gather(); // P2 does something else
@@ -233,7 +260,7 @@ TEST_CASE("Spy Role") {
 
         p3.gather(); // P3 turn. P3 coins = 2. Turn Spy.
         spy.gather(); // Spy turn. Spy coins = 1. Turn P2.
-        
+
         CHECK_NOTHROW(p2.arrest(p3));
         CHECK(p2.getCoins() == 1 + 1);
         CHECK(p3.getCoins() == 2 - 1);
@@ -285,18 +312,40 @@ TEST_CASE("General Role") {
         general.coins = 3;
         
         general.gather(); // Gen coins = 4. Turn P2.
-		p2.gather();
-        p3.coins = 7;
-        p3.coup(p2);
-		CHECK_THROWS(general.unCoup(p2));
+		p2.coins = 7;
+		p2.coup(p3);
+		CHECK_THROWS(general.unCoup(p3));
+		cout<<game.players().size()<<endl;
+		for (string name : game.toCoup) {
+			cout << "- " << name << endl;
+		}
 		general.coins = 5;
-		general.unCoup(p2);
+		general.unCoup(p3);
+		for (string name : game.toCoup) {
+			cout << "- " << name << endl;
+		}
 		CHECK(general.coins == 0);
-		CHECK_NOTHROW(p2.gather());
-		p3.tax();
+		general.gather();
+		p2.gather();
+		CHECK_NOTHROW(p3.gather());
 		CHECK_THROWS(general.unCoup(p3));
 
     }
+
+	SUBCASE("General unCoup himself") {
+		Player p4(game, "P4");
+		CHECK(game.players().size() == 4);
+		general.tax();
+		general.coins = 5;
+		p2.coins = 7;
+		p2.coup(general);
+		CHECK(game.players().size() == 3);
+		p3.gather();
+		general.unCoup(general);
+		CHECK(game.players().size() == 4);
+		p4.gather();
+		CHECK_NOTHROW(general.tax());
+	}
 }
 
 TEST_CASE("Judge Role") {
@@ -331,6 +380,7 @@ TEST_CASE("Judge Role") {
         p2.sanction(judge);
         CHECK(judge.get_isSancted());
         CHECK(p2.getCoins() == 0);
+		p3.gather();
         CHECK(game.turn() == "Judge");
         
         CHECK_THROWS_AS(judge.gather(), std::runtime_error);
@@ -366,20 +416,53 @@ TEST_CASE("Merchant Role") {
 
         p2.gather(); // P2 turn. Turn Mrch.
         CHECK_THROWS_AS(merchant.gather(), std::runtime_error);
+		CHECK(merchant.getCoins() == 11);
         CHECK_NOTHROW(merchant.coup(p2)); // P2 removed
-        CHECK(merchant.getCoins() == 4);
+        CHECK(merchant.getCoins() == 5); //11 + 1(bonus) -7(coup)
         CHECK(game.turn() == "Mrch");
     }
 
     SUBCASE("arrest") {
+		merchant.tax();
         p2.gather(); // P2 coins = 1. Turn Mrch.
         
-        merchant.coins = 3;
-        merchant.gather(); // Mrch coins = 3 + 1(bonus) + 1(gather) = 5. Turn P2.
+        merchant.gather(); // Mrch coins = 3
         
+		CHECK(p2.getCoins() == 1);
         p2.arrest(merchant);
         CHECK(p2.getCoins() == 1);
-        CHECK(merchant.getCoins() == 5 - 2);
+        CHECK(merchant.getCoins() == 3 - 2);
         CHECK(game.turn() == "Mrch");
     }
+}
+
+TEST_CASE("Governor Role") {
+    Game game;
+    Governor gov(game, "Gov");
+    Player p2(game, "P2");
+
+    SUBCASE("Governor tax") {
+        CHECK(game.turn() == "Gov");
+        gov.tax();
+        CHECK(gov.getCoins() == 3);
+        CHECK(game.turn() == "P2");
+    }
+	SUBCASE("Governor sanction") {
+		p2.coins = 3;
+		gov.gather();
+		p2.sanction(gov);
+		CHECK_THROWS(gov.gather());
+		CHECK_THROWS(gov.tax());
+		CHECK(gov.getCoins() == 1);
+	}
+
+    SUBCASE("Governor undo_tax (as reaction)") {
+        gov.gather(); // Gov turn. Gov coins = 1. Turn P2.
+        p2.tax();     // P2 turn. P2 coins = 2. P2 lastAct = "tax". Turn Gov.
+
+        CHECK_NOTHROW(gov.undo_tax(p2));
+        CHECK(p2.getCoins() == 0);
+        CHECK(game.turn() == "Gov");
+    }
+    
 }
