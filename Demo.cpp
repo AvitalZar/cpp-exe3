@@ -1,11 +1,11 @@
 
 #include "roles/player.hpp"
-#include "roles/governor.hpp"
-#include "roles/spy.hpp"
-#include "roles/baron.hpp"
-#include "roles/general.hpp"
-#include "roles/judge.hpp"
-#include "roles/merchant.hpp"
+#include "roles/headers/governor.hpp"
+#include "roles/headers/spy.hpp"
+#include "roles/headers/baron.hpp"
+#include "roles/headers/general.hpp"
+#include "roles/headers/judge.hpp"
+#include "roles/headers/merchant.hpp"
 #include "game.hpp"
 
 #include <exception>

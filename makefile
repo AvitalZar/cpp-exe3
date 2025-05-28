@@ -1,7 +1,7 @@
 #tchykzr@gmail.com
 CXX = g++ -g
-CXXFLAGS = -std=c++2a -Wall -I. -Iroles
-PHEADER_FILES = $(wildcard roles/*.hpp)
+CXXFLAGS = -std=c++2a -Wall -I. -Iroles -Iroles/headers -Iroles/sources
+PHEADER_FILES = $(wildcard roles/headers/*) roles/player.hpp
 POBJ_FILES = $(notdir $(PHEADER_FILES:.hpp=.o))
 
 main: Demo.o $(POBJ_FILES) game.o
@@ -24,14 +24,13 @@ game.o: game.cpp game.hpp
 test.o: test.cpp doctest.h
 	$(CXX) $(CXXFLAGS) -c $<
 
-
-%.o: roles/%.cpp roles/%.hpp roles/player.hpp game.hpp
+player.o: roles/player.cpp roles/player.hpp game.hpp
 	$(CXX) $(CXXFLAGS) -c $<
 
 
+%.o: roles/sources/%.cpp roles/headers/%.hpp roles/player.hpp game.hpp
+	$(CXX) $(CXXFLAGS) -c $<
 
-#player.o: roles/player.cpp roles/player.hpp game.hpp
-#	$(CXX) $(CXXFLAGS) -c $<
 
 valgrind: main
 	valgrind --leak-check=full ./main
