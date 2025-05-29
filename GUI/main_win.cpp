@@ -1,6 +1,7 @@
+//tchykzr@gmail.com
 #include "main_win.hpp"
 
-MainWindow::MainWindow(Game &g, vector<Player>& p, QWidget *parent)
+MainWindow::MainWindow(Game &g, vector<Player*>& p, QWidget *parent)
     : QMainWindow(parent), game(g), players(p)
 {
     add_player = new QPushButton("Add a player", this);
@@ -40,7 +41,7 @@ void MainWindow::createNewPlayer(PlayerFactory factory) {
     }
 
     try {
-        players.emplace_back(factory(game,name.toStdString()));
+        players.emplace_back(new Player(factory(game,name.toStdString())));
         qDebug() << "a player named " << name << "added";
     } catch (const std::exception& e) {
         QMessageBox::critical(this, "Error", e.what());
@@ -55,7 +56,7 @@ void MainWindow::createNewPlayer(PlayerFactory factory) {
 void MainWindow::startGame() {
 	if (players.empty()) return;
 
-    turnWin = new TurnWindow(&players[findTurn()]);
+    turnWin = new TurnWindow(players[findTurn()],players);
     connect(turnWin, &TurnWindow::turnEnded, this, &MainWindow::showNextTurn);
 
     turnWin->show();
@@ -66,7 +67,7 @@ void MainWindow::showNextTurn() {
 	turnWin->hide();
     delete turnWin;
 
-    turnWin = new TurnWindow(&players[findTurn()]);
+    turnWin = new TurnWindow(players[findTurn()],players);
     connect(turnWin, &TurnWindow::turnEnded, this, &MainWindow::showNextTurn);
     turnWin->show();
 }
@@ -114,12 +115,23 @@ void MainWindow::showInputLine() {
 }
 
 MainWindow::~MainWindow(){
+	delete add_player;
+	delete central;
+	delete layout;
+	delete name_line;
+	delete playerList;
+	delete tafkidim;
+	delete roles;
+	delete keep_roles;
+
+	delete startButton;
+	delete turnWin;
 	
 }
 
 int MainWindow::findTurn(){
 	for(unsigned int i = 0; i < players.size(); i++){
-		if(players[i].name() == game.turn())
+		if(players[i]->name() == game.turn())
 			return i;
 	}
 	return -1;

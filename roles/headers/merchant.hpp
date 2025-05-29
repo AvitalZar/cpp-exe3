@@ -1,3 +1,4 @@
+//tchykzr@gmail.com
 #pragma once
 #include "player.hpp"
 namespace coup{

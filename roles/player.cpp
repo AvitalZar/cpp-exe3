@@ -1,3 +1,4 @@
+//tchykzr@gmail.com
 #include "player.hpp"
 using namespace coup;
 
@@ -6,6 +7,12 @@ Player::Player(Game &g, string n): game(g){
 	
 
 	game.add_player(name());
+	coins = 0;
+	cout << endl << "made a new player named " << name() << endl;
+}
+
+coup::Player::Player(const Player &other): game(other.game) {
+	p_name = other.p_name;
 	coins = 0;
 	cout << endl << "made a new player named " << name() << endl;
 }
@@ -66,6 +73,10 @@ void Player::coup(Player& other) {
 	coins -= 7;
 	game.coup(name(), other.name());
 	afterAll("coup");
+}
+
+void coup::Player::undo(Player &other) {
+	throw runtime_error("Regular players can't undo actions.");
 }
 
 void Player::beforeAll(string func) {

@@ -1,3 +1,4 @@
+//tchykzr@gmail.com
 #include "governor.hpp"
 using namespace coup;
 
@@ -9,7 +10,7 @@ void Governor::tax()
 	coins++;
 }
 
-	void coup::Governor::undo_tax(Player &p) {
+	void coup::Governor::undo(Player &p) {
 			p.unTaxed();
 		
 	}

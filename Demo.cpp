@@ -1,3 +1,4 @@
+//tchykzr@gmail.com
 
 #include "roles/player.hpp"
 #include "roles/headers/governor.hpp"
@@ -61,7 +62,7 @@ int main() {
 
     // Expected exception - Judge cannot undo tax
     try{
-        judge.un_bribe(governor);
+        judge.undo(governor);
     } catch (const std::exception &e) {
         std::cerr << e.what() << '\n';
     }
@@ -69,7 +70,7 @@ int main() {
     cout << governor.getCoins() << endl; // Expected: 2
     cout << spy.getCoins() << endl; // Expected: 3
 
-    governor.undo_tax(spy); // Governor undo tax
+    governor.undo(spy); // Governor undo tax
     cout << spy.getCoins() << endl; // Expected: 1
 
     baron.tax();

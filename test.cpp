@@ -1,3 +1,4 @@
+//tchykzr@gmail.com
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 #include "doctest.h"
 
@@ -314,13 +315,13 @@ TEST_CASE("General Role") {
         general.gather(); // Gen coins = 4. Turn P2.
 		p2.coins = 7;
 		p2.coup(p3);
-		CHECK_THROWS(general.unCoup(p3));
+		CHECK_THROWS(general.undo(p3));
 		cout<<game.players().size()<<endl;
 		for (string name : game.toCoup) {
 			cout << "- " << name << endl;
 		}
 		general.coins = 5;
-		general.unCoup(p3);
+		general.undo(p3);
 		for (string name : game.toCoup) {
 			cout << "- " << name << endl;
 		}
@@ -328,7 +329,7 @@ TEST_CASE("General Role") {
 		general.gather();
 		p2.gather();
 		CHECK_NOTHROW(p3.gather());
-		CHECK_THROWS(general.unCoup(p3));
+		CHECK_THROWS(general.undo(p3));
 
     }
 
@@ -341,7 +342,7 @@ TEST_CASE("General Role") {
 		p2.coup(general);
 		CHECK(game.players().size() == 3);
 		p3.gather();
-		general.unCoup(general);
+		general.undo(general);
 		CHECK(game.players().size() == 4);
 		p4.gather();
 		CHECK_NOTHROW(general.tax());
@@ -354,13 +355,13 @@ TEST_CASE("Judge Role") {
     Player p2(game, "P2");
     Player p3(game, "P3");
 
-    SUBCASE("Judge un_bribe (as reaction)") {
-		CHECK_THROWS(judge.un_bribe(p2));
+    SUBCASE("Judge undo (as reaction)") {
+		CHECK_THROWS(judge.undo(p2));
         judge.gather(); // Judge coins = 1. Turn P2.
         p2.coins = 4;
         p2.bribe();     // P2 bribes. P2 coins = 0. P2 gets another turn. Turn P2.
 
-        CHECK_NOTHROW(judge.un_bribe(p2)); // Judge unbribes P2
+        CHECK_NOTHROW(judge.undo(p2)); // Judge unbribes P2
 
 		p3.gather();
 		judge.gather();
@@ -368,7 +369,7 @@ TEST_CASE("Judge Role") {
         
         p2.gather(); // P2 takes an action.
         CHECK(p2.getCoins() == 1);
-        CHECK(game.turn() == "P3"); // Turn moved, un_bribe worked.
+        CHECK(game.turn() == "P3"); // Turn moved, undo worked.
     }
 
     SUBCASE("Judge being sanctioned (reaction to sanction)") {
@@ -456,11 +457,11 @@ TEST_CASE("Governor Role") {
 		CHECK(gov.getCoins() == 1);
 	}
 
-    SUBCASE("Governor undo_tax (as reaction)") {
+    SUBCASE("Governor undo (as reaction)") {
         gov.gather(); // Gov turn. Gov coins = 1. Turn P2.
         p2.tax();     // P2 turn. P2 coins = 2. P2 lastAct = "tax". Turn Gov.
 
-        CHECK_NOTHROW(gov.undo_tax(p2));
+        CHECK_NOTHROW(gov.undo(p2));
         CHECK(p2.getCoins() == 0);
         CHECK(game.turn() == "Gov");
     }

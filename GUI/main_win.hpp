@@ -1,3 +1,4 @@
+//tchykzr@gmail.com
 #include <QApplication>
 #include <QPushButton>
 #include <QMainWindow>
@@ -24,13 +25,13 @@ class MainWindow : public QMainWindow {
     Q_OBJECT
 
 public:
-    explicit MainWindow(Game& g, vector<Player>& p, QWidget *parent = nullptr);
+    explicit MainWindow(Game& g, vector<Player*>& p, QWidget *parent = nullptr);
 
 	~MainWindow();
 
 private:
     Game game;
-	vector<Player> players;
+	vector<Player*> players;
 
 	QPushButton *add_player;
 	QWidget *central;

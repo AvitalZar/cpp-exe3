@@ -1,3 +1,4 @@
+//tchykzr@gmail.com
 #include "roles/player.hpp"
 using namespace coup;
 

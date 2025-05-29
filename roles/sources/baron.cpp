@@ -1,3 +1,4 @@
+//tchykzr@gmail.com
 #include "baron.hpp"
 namespace coup{
 

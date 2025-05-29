@@ -1,8 +1,9 @@
+//tchykzr@gmail.com
 #include "cute.hpp"
 
 int main(int argc, char *argv[]) {
 	Game game;
-	vector<coup::Player> players;
+	vector<coup::Player*> players;
 
     QApplication app(argc, argv);
 
@@ -12,6 +13,10 @@ int main(int argc, char *argv[]) {
 
     window.setWindowTitle("Coup : set players");
     window.show();
+
+	for(unsigned int i = 0; i<players.size(); i++){
+		delete players[i];
+	}
 
     return app.exec();
 }

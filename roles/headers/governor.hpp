@@ -1,3 +1,4 @@
+//tchykzr@gmail.com
 #pragma once
 
 #include "player.hpp"
@@ -10,7 +11,7 @@ namespace coup{
 		
 		void tax() override;
 
-		void undo_tax(Player& p);
+		void undo(Player& p) override;
 
 		void unTaxed(){
 			Player::unTaxed();

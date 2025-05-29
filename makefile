@@ -13,9 +13,7 @@ test: test.o game.o $(POBJ_FILES)
 	$(CXX) $(CXXFLAGS) $^ -o $@
 	./test
 
-run: run.cpp
-	$(CXX) run.cpp -o sfml-app -lsfml-graphics -lsfml-window -lsfml-system
-	./sfml-app
+
 qt: cute.o main_win.o main_win.moc.o turn_win.o  turn_win.moc.o $(POBJ_FILES) game.o
 	$(CXX) $(CXXFLAGS) $^ -o $@ $(LDFLAGS)
 	./qt
@@ -65,4 +63,4 @@ valgrind: main
 	valgrind --leak-check=full ./main
 
 clean:
-	rm -f *.o main test qt sfml-app
+	rm -f *.o main test qt

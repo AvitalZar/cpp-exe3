@@ -1,3 +1,4 @@
+//tchykzr@gmail.com
 #pragma once
 #include "game.hpp"
 using namespace std;
@@ -25,6 +26,7 @@ namespace coup {
 	public:
 		unsigned int coins;
 		Player(Game &g, string n);
+		Player(const Player& other);
 		string name() {return p_name;}
 		void gather();
 		virtual void tax();
@@ -33,6 +35,11 @@ namespace coup {
 		void sanction(Player& other);
 		void coup(Player& other);
 		int getCoins() {return coins;}
+
+		virtual void undo(Player &other);
+		virtual int peekCoins(Player &other) {throw runtime_error("Only spy can peek.");};
+		virtual void prevent_arrest(Player &other) {throw runtime_error("Only spy can prevent arrest.");};
+		virtual void invest() {throw runtime_error("Only barons can invest.");}
 
 	
 		virtual void sanctioned(Player& p) {isSancted = true;}

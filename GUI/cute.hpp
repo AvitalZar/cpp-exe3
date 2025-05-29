@@ -1,3 +1,4 @@
+//tchykzr@gmail.com
 #include <QApplication>
 #include <QPushButton>
 #include <QWidget>

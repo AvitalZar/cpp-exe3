@@ -1,3 +1,4 @@
+//tchykzr@gmail.com
 #include "spy.hpp"
 
 coup::Spy::Spy(Game &g, string n): Player(g,n) {}
