@@ -8,5 +8,7 @@ namespace coup {
 	public:
 		General(Game &g, string n);
 		void unCoup(Player& p);
+
+		~General() {}
 	};
 }

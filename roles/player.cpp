@@ -7,6 +7,7 @@ Player::Player(Game &g, string n): game(g){
 
 	game.add_player(name());
 	coins = 0;
+	cout << endl << "made a new player named " << name() << endl;
 }
 
 void Player::gather() {

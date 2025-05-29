@@ -7,5 +7,6 @@ namespace coup{
 		Spy(Game &g, string n);
 		int peekCoins(Player& p);
 		void prevent_arrest(Player& p);
+		~Spy() {}
 	};
 }

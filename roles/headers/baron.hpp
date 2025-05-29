@@ -8,5 +8,6 @@ namespace coup {
 			Baron(Game &g, string n);
 			void invest();
 			void sanctioned(Player& p) override;
+			~Baron() {}
 	};
 }

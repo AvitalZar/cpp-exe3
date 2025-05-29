@@ -16,5 +16,7 @@ namespace coup{
 			Player::unTaxed();
 			coins--;
 		}
+
+		~Governor() {}
 	};
 }

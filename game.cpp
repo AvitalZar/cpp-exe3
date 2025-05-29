@@ -72,11 +72,7 @@ void coup::Game::add_player(string p) {
 void coup::Game::move_turn()
 {
 	cout << "move turn" << endl;
-	turnum++;
-	if(turnum == play_ord.size()){
-		cout << "zero turn" << endl;
-		turnum = 0;
-	}
+	turnum = (turnum + 1)%play_ord.size();
 	
 	if(toCoup[turnum] != ""){
 		cout << "End a round, coup." << endl;

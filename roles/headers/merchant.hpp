@@ -7,5 +7,6 @@ namespace coup{
 		Merchant(Game &game, string name);
 		void beforeAll(string func) override;
 		void arrested(Player& p) override;
+		~Merchant() {}
 	};
 }

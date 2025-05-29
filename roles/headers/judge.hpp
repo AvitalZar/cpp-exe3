@@ -7,5 +7,6 @@ namespace coup{
 		Judge(Game &game, string name);
 		void un_bribe(Player& p);
 		void sanctioned(Player& p);
+		~Judge() {}
 	};
 }
