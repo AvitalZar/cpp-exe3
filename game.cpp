@@ -42,7 +42,7 @@ void Game::coup(string active, string passive){
 		if(turnum >= play_ord.size()){
 			turnum = 0;
 		}
-		toCoup[loc] = "";
+		toCoup[find(play_ord,active)] = "";
 	}
 	else
 		throw runtime_error("Something wrong. This player was about to coup another player.");
@@ -73,7 +73,8 @@ void coup::Game::add_player(string p) {
 void coup::Game::move_turn()
 {
 	cout << "move turn" << endl;
-	turnum = (turnum + 1)%play_ord.size();
+	turnum ++;
+	if(turnum == play_ord.size()) turnum = 0;
 	
 	if(toCoup[turnum] != ""){
 		cout << "End a round, coup." << endl;

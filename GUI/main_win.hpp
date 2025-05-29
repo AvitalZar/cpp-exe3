@@ -30,8 +30,8 @@ public:
 	~MainWindow();
 
 private:
-    Game game;
-	vector<Player*> players;
+    Game& game;
+	vector<Player*>& players;
 
 	QPushButton *add_player;
 	QWidget *central;
@@ -45,7 +45,7 @@ private:
 	QPushButton* startButton;
 	TurnWindow* turnWin;
 
-	using PlayerFactory = std::function<Player(Game&, const std::string&)>;
+	using PlayerFactory = std::function<Player*(Game&, const std::string)>;
 	int findTurn();
 
 

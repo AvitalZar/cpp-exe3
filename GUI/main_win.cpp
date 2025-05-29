@@ -1,7 +1,7 @@
 //tchykzr@gmail.com
 #include "main_win.hpp"
 
-MainWindow::MainWindow(Game &g, vector<Player*>& p, QWidget *parent)
+MainWindow::MainWindow(Game& g, vector<Player*>& p, QWidget *parent)
     : QMainWindow(parent), game(g), players(p)
 {
     add_player = new QPushButton("Add a player", this);
@@ -41,7 +41,7 @@ void MainWindow::createNewPlayer(PlayerFactory factory) {
     }
 
     try {
-        players.emplace_back(new Player(factory(game,name.toStdString())));
+        players.emplace_back(factory(game,name.toStdString()));
         qDebug() << "a player named " << name << "added";
     } catch (const std::exception& e) {
         QMessageBox::critical(this, "Error", e.what());
@@ -77,28 +77,28 @@ void MainWindow::setRolesButtons() {
 	roles = new QHBoxLayout(keep_roles);
 	tafkidim[0] = new QPushButton("Governor", this);
 	connect(tafkidim[0], &QPushButton::clicked, [this]() {
-    createNewPlayer([](coup::Game& g, const std::string& n) { return Governor(g, n); });
+    createNewPlayer([](coup::Game& g, const std::string n) { return new Governor(g, n); });
 });
 
 	tafkidim[1] = new QPushButton("Spy", this);
 	connect(tafkidim[1], &QPushButton::clicked, [this]() {
-    createNewPlayer([](coup::Game& g, const std::string& n) { return Spy(g, n); });
+    createNewPlayer([](coup::Game& g, const std::string& n) { return new Spy(g, n); });
 });
 	tafkidim[2] = new QPushButton("Baron", this);
 	connect(tafkidim[2], &QPushButton::clicked, [this]() {
-    createNewPlayer([](coup::Game& g, const std::string& n) { return Baron(g, n); });
+    createNewPlayer([](coup::Game& g, const std::string& n) { return new Baron(g, n); });
 });
 	tafkidim[3] = new QPushButton("Judge", this);
 	connect(tafkidim[3], &QPushButton::clicked, [this]() {
-    createNewPlayer([](coup::Game& g, const std::string& n) { return Judge(g, n); });
+    createNewPlayer([](coup::Game& g, const std::string& n) { return new Judge(g, n); });
 });
 	tafkidim[4] = new QPushButton("General", this);
 	connect(tafkidim[4], &QPushButton::clicked, [this]() {
-    createNewPlayer([](coup::Game& g, const std::string& n) { return General(g, n); });
+    createNewPlayer([](coup::Game& g, const std::string& n) { return new General(g, n); });
 });
 	tafkidim[5] = new QPushButton("Merchant", this);
 	connect(tafkidim[5], &QPushButton::clicked, [this]() {
-    createNewPlayer([](coup::Game& g, const std::string& n) { return Merchant(g, n); });
+    createNewPlayer([](coup::Game& g, const std::string& n) { return new Merchant(g, n); });
 });
 	for(int i = 0; i < 6; i++){
 		roles->addWidget(tafkidim[i]);
@@ -120,7 +120,9 @@ MainWindow::~MainWindow(){
 	delete layout;
 	delete name_line;
 	delete playerList;
-	delete tafkidim;
+	for(int i = 0; i < 6; i++){
+		delete tafkidim[i];
+	}
 	delete roles;
 	delete keep_roles;
 

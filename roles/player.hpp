@@ -26,7 +26,7 @@ namespace coup {
 	public:
 		unsigned int coins;
 		Player(Game &g, string n);
-		Player(const Player& other);
+		//Player(const Player& other);
 		string name() {return p_name;}
 		void gather();
 		virtual void tax();
@@ -53,5 +53,8 @@ namespace coup {
 
 		virtual void unTaxed();
 		void unBribed();
+		
+		virtual ~Player() {}
+	
 	};
 }

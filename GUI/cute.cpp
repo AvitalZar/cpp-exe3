@@ -14,9 +14,10 @@ int main(int argc, char *argv[]) {
     window.setWindowTitle("Coup : set players");
     window.show();
 
-	for(unsigned int i = 0; i<players.size(); i++){
-		delete players[i];
+	for(int i = 0; i < (players).size(); i++){
+		delete (players)[i];
 	}
+
 
     return app.exec();
 }

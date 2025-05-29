@@ -58,8 +58,9 @@ TurnWindow::~TurnWindow() {
     // פעולות רגילות
     delete regularActionsWidget;
     delete regularLayout;
-    delete regularButtons[6];
-
+	for(int i = 0; i < 6; i++){
+		delete regularButtons[i];
+	}
     // פעולות מיוחדות
     delete specialActionsWidget;
     delete specialLayout;

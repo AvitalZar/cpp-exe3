@@ -11,11 +11,11 @@ Player::Player(Game &g, string n): game(g){
 	cout << endl << "made a new player named " << name() << endl;
 }
 
-coup::Player::Player(const Player &other): game(other.game) {
+/*coup::Player::Player(const Player &other): game(other.game) {
 	p_name = other.p_name;
 	coins = 0;
 	cout << endl << "made a new player named " << name() << endl;
-}
+}*/
 
 void Player::gather() {
 	beforeAll("gather");
